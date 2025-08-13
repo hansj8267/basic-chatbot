@@ -51,6 +51,24 @@ document.getElementById("assignment-form").addEventListener("submit", async e =>
 });
 fetchAssignments();
 
+// --- 운세 ---
+async function loadFortune() {
+  const res = await fetch("/api/fortune");
+  const data = await res.json();
+  document.getElementById("fortuneResult").innerText = data.fortune;
+}
+document.getElementById("refreshFortuneBtn").addEventListener("click", loadFortune);
+loadFortune();
+
+// --- 성경 말씀 ---
+async function loadBible() {
+  const res = await fetch("/api/bible");
+  const data = await res.json();
+  document.getElementById("bibleResult").innerText = `"${data.verse}" (${data.reference})`;
+}
+document.getElementById("refreshBibleBtn").addEventListener("click", loadBible);
+loadBible();
+
 // --- 날씨 ---
 async function loadWeather() {
   const res = await fetch("/api/weather");

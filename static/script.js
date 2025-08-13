@@ -1,9 +1,17 @@
-function showScreen(name){
-    const screens = ['chat','assignments','verse','weather'];
-    screens.forEach(s => document.getElementById(s+'Screen').style.display = 'none');
-    document.getElementById(name+'Screen').style.display = 'block';
-  }
-  showScreen('chat');
+function showScreen(name) {
+  const screens = document.querySelectorAll('.screen');
+  screens.forEach(s => s.style.display = 'none');
+
+  if(name === 'chat') document.getElementById('chat-screen').style.display = 'block';
+  if(name === 'assignments') document.getElementById('assignments-screen').style.display = 'block';
+  if(name === 'weather') document.getElementById('weather-screen').style.display = 'block';
+}
+
+// 초기 화면
+showScreen('chat');
+
+// 여기에 기존 챗봇, 과제, 날씨 JS 코드 모두 추가
+
   
   const responses = {"안녕":"안녕하세요.","이름":"저는 챗봇입니다."};
   document.getElementById("chat-form").addEventListener("submit", e=>{

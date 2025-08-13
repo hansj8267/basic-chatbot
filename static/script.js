@@ -62,12 +62,36 @@ loadFortune();
 
 // --- 성경 말씀 ---
 async function loadBible() {
-  const res = await fetch("/api/bible");
-  const data = await res.json();
-  document.getElementById("bibleResult").innerText = `"${data.verse}"`;
+  try {
+    const apiKey = "be163d8b2d1c5fd2c46fe81f527a1e93"; // 발급받은 API 키
+    const bibleId = "krv"; // Korean Revised Version
+    const verseId = "jhn.1.1"; // 요한복음 1장 1절
+
+    const res = await fetch(`https://api.scripture.api.bible/v1/bibles/${bibleId}/verses/${verseId}`, {
+      headers: {
+        "api-key": "be163d8b2d1c5fd2c46fe81f527a1e93" 
+      }
+    });
+
+    const data = await res.json();
+
+    // API 응답에서 구절 가져오기
+    const verseText = data.data.content || data.data.verse || "구절을 불러올 수 없습니다.";
+
+    // 화면에 표시
+    document.getElementById("bibleResult").innerText = `오늘의 구절: ${verseText}`;
+  } catch (err) {
+    document.getElementById("bibleResult").innerText = "불러오는 중 오류가 발생했습니다.";
+    console.error(err);
+  }
 }
+
+// 새로 고침 버튼 연결
 document.getElementById("refreshBibleBtn").addEventListener("click", loadBible);
+
+// 페이지 로드 시 자동 호출
 loadBible();
+
 
 // --- 날씨 ---
 async function loadWeather() {

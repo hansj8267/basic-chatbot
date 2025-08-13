@@ -3,7 +3,7 @@ body {
   margin: 0;
   font-family: 'Nanum Pen Script', cursive;
   background: linear-gradient(to bottom, #87ceeb, #ffffff);
-  display: flex; /* flex로 변경 */
+  display: flex; /* 사이드바 때문에 flex로 변경 */
   justify-content: flex-start; /* 왼쪽 정렬 */
   align-items: flex-start;
   min-height: 100vh;
@@ -41,6 +41,7 @@ body {
   box-shadow: 0 5px 20px rgba(0,0,0,0.2);
   text-align: center;
   margin: 50px;
+  margin-left: 200px;
 }
 
 .chat-container h1 {
@@ -78,9 +79,12 @@ body {
   text-align: left;
 }
 
+/* 과제 */
 #assignmentsBox {
   margin-top: 15px;
   text-align: left;
+  max-height: 300px; /* 스크롤 가능 높이 */
+  overflow-y: auto;
 }
 
 .assignment-card {
@@ -89,6 +93,8 @@ body {
   border-radius: 15px;
   margin-bottom: 10px;
   position: relative;
+  word-wrap: break-word; /* 긴 단어도 줄바꿈 */
+  white-space: normal;   /* 줄바꿈 허용 */
 }
 
 .delete-btn {
@@ -107,7 +113,7 @@ body {
   background: #ff1a1a;
 }
 
-/* 사이드바 추가 */
+/* 사이드바 */
 .sidebar {
   width: 260px;
   background-color: rgba(44, 62, 80, 0.9);

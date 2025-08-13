@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ name }}님의 챗봇</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
 <body>
   <!-- 사이드바 -->
   <div class="sidebar">
@@ -27,31 +35,31 @@
     </div>
   </div>
 
-  <!-- 메인 콘텐츠 -->
-  <div class="main-content">
-    <div class="chat-container">
-      <h1>{{ name }}님의 챗봇</h1>
-      <div id="chat-section">
-        <form id="chat-form">
-          <input type="text" id="messageInput" placeholder="질문을 입력하세요">
-          <input type="submit" value="전송">
-        </form>
-        <div class="reply" id="replyBox"></div>
-      </div>
+  <!-- 기존 챗봇 UI -->
+  <div class="chat-container">
+    <h1>{{ name }}님의 챗봇</h1>
 
-      <!-- 운세 -->
-      <div id="fortune-section">
-        <h2>오늘의 운세</h2>
-        <div id="fortuneResult">불러오는 중...</div>
-        <button id="refreshFortuneBtn">다시 보기</button>
-      </div>
+    <!-- 챗봇 -->
+    <div id="chat-section">
+      <form id="chat-form">
+        <input type="text" id="messageInput" placeholder="질문을 입력하세요">
+        <input type="submit" value="전송">
+      </form>
+      <div class="reply" id="replyBox"></div>
+    </div>
 
-      <!-- 성경 말씀 -->
-      <div id="bible-section">
-        <h2>오늘의 성경 말씀</h2>
-        <div id="bibleResult">불러오는 중...</div>
-        <button id="refreshBibleBtn">다시 보기</button>
-      </div>
+    <!-- 운세 -->
+    <div id="fortune-section">
+      <h2>오늘의 운세</h2>
+      <div id="fortuneResult">불러오는 중...</div>
+      <button id="refreshFortuneBtn">다시 보기</button>
+    </div>
+
+    <!-- 성경 말씀 -->
+    <div id="bible-section">
+      <h2>오늘의 성경 말씀</h2>
+      <div id="bibleResult">불러오는 중...</div>
+      <button id="refreshBibleBtn">다시 보기</button>
     </div>
   </div>
 
@@ -65,3 +73,4 @@
     updateClock();
   </script>
 </body>
+</html>

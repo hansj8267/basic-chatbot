@@ -1,0 +1,26 @@
+body {
+    margin:0; font-family: Arial, sans-serif;
+    display:flex; height:100vh;
+  }
+  
+  .sidebar {
+    width:150px; background:#87ceeb; display:flex; flex-direction:column;
+    padding:10px; box-sizing:border-box;
+  }
+  
+  .sidebar button {
+    margin-bottom:10px; padding:10px; border:none; border-radius:5px;
+    cursor:pointer; background:#fff;
+  }
+  
+  .sidebar button:hover { background:#00bfff; color:#fff; }
+  
+  .main-content {
+    flex:1; padding:20px; box-sizing:border-box; background:linear-gradient(to bottom, #f0f8ff, #ffffff);
+  }
+  
+  .screen { display:none; }
+  
+  input, button { margin:5px; padding:5px; }
+  #replyBox, #assignmentsBox, #verseBox, #weatherBox { margin-top:10px; }
+  

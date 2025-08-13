@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>{{name}}님의 챗봇</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="sidebar">
+    <button onclick="showScreen('chat')">챗봇</button>
+    <button onclick="showScreen('assignments')">과제</button>
+    <button onclick="showScreen('verse')">오늘의 말씀</button>
+    <button onclick="showScreen('weather')">날씨</button>
+  </div>
+
+  <div class="main-content">
+    <div id="chatScreen" class="screen">
+      <h2>챗봇</h2>
+      <form id="chat-form">
+        <input id="messageInput" placeholder="질문을 입력하세요">
+        <button type="submit">전송</button>
+      </form>
+      <div id="replyBox"></div>
+    </div>
+
+    <div id="assignmentsScreen" class="screen">
+      <h2>과제 목록</h2>
+      <input id="taskDate" type="date">
+      <input id="taskText" placeholder="과제 내용">
+      <button onclick="addAssignment()">추가</button>
+      <div id="assignmentsBox"></div>
+    </div>
+
+    <div id="verseScreen" class="screen">
+      <h2>오늘의 성경 말씀</h2>
+      <div id="verseBox"></div>
+    </div>
+
+    <div id="weatherScreen" class="screen">
+      <h2>날씨</h2>
+      <input id="cityInput" placeholder="도시 입력">
+      <button onclick="saveCity()">저장</button>
+      <div id="weatherBox"></div>
+    </div>
+  </div>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>

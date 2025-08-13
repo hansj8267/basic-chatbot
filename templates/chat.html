@@ -1,42 +1,44 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>승진의 챗봇</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../static/style.css">
+  <meta charset="UTF-8" />
+  <title>{{ name or '' }}님의 챗봇</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
   <div class="main-container">
-    <div class="sidebar">
+    <aside class="sidebar">
+      <h2 id="welcome-name">님, 환영합니다!</h2>
       <button onclick="showScreen('chat')">챗봇</button>
       <button onclick="showScreen('assignments')">과제</button>
       <button onclick="showScreen('time')">시간</button>
-    </div>
+    </aside>
 
-    <div class="chat-area">
-      <h2 id="welcome-name">님, 챗봇에 오신 것을 환영합니다!</h2>
-
-      <div id="chat-screen" class="screen">
+    <main class="chat-area">
+      <!-- 챗봇 -->
+      <section id="chat-screen" class="screen">
         <form id="chat-form">
-          <input id="messageInput" placeholder="질문을 입력하세요">
+          <input id="messageInput" placeholder="질문을 입력하세요" />
           <button type="submit">전송</button>
         </form>
         <div id="replyBox"></div>
-      </div>
+      </section>
 
-      <div id="assignments-screen" class="screen" style="display:none;">
+      <!-- 과제 -->
+      <section id="assignments-screen" class="screen" style="display:none;">
         <h3>등록된 과제</h3>
         <div id="assignmentsBox"></div>
-      </div>
+      </section>
 
-      <div id="time-screen" class="screen" style="display:none;">
+      <!-- 시간 -->
+      <section id="time-screen" class="screen" style="display:none;">
         <h3>현재 시간</h3>
         <div id="timeBox"></div>
-      </div>
-    </div>
+      </section>
+    </main>
   </div>
 
-  <script src="../static/chat.js"></script>
+  <script src="/static/script.js"></script>
 </body>
 </html>

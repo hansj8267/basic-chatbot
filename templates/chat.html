@@ -9,14 +9,16 @@
 <body>
   <!-- 사이드바 -->
   <div class="sidebar">
-    <!-- 시간 -->
-    <div class="section">
-      <h2>현재 시간</h2>
-      <div id="clock"></div>
-    </div>
+    <button class="tab-btn" data-target="assignments-section">📚</button>
+    <button class="tab-btn" data-target="fortune-section">🔮</button>
+    <button class="tab-btn" data-target="bible-section">📖</button>
+    <button class="tab-btn" data-target="weather-section">☀️</button>
+  </div>
 
+  <!-- 컨텐츠 영역 -->
+  <div class="content-container">
     <!-- 과제 -->
-    <div class="section">
+    <div id="assignments-section" class="tab-content">
       <h2>등록된 과제</h2>
       <div id="assignmentsBox"></div>
       <form id="assignment-form">
@@ -26,51 +28,57 @@
       </form>
     </div>
 
-    <!-- 날씨 -->
-    <div class="section">
-      <h2>오늘의 날씨</h2>
-      <input type="text" id="weatherCity" placeholder="도시 이름">
-      <button id="saveWeatherBtn">저장</button>
-      <div id="weatherResult"></div>
-    </div>
-  </div>
-
-  <!-- 기존 챗봇 UI -->
-  <div class="chat-container">
-    <h1>{{ name }}님의 챗봇</h1>
-
-    <!-- 챗봇 -->
-    <div id="chat-section">
-      <form id="chat-form">
-        <input type="text" id="messageInput" placeholder="질문을 입력하세요">
-        <input type="submit" value="전송">
-      </form>
-      <div class="reply" id="replyBox"></div>
-    </div>
-
     <!-- 운세 -->
-    <div id="fortune-section">
+    <div id="fortune-section" class="tab-content">
       <h2>오늘의 운세</h2>
       <div id="fortuneResult">불러오는 중...</div>
       <button id="refreshFortuneBtn">다시 보기</button>
     </div>
 
     <!-- 성경 말씀 -->
-    <div id="bible-section">
+    <div id="bible-section" class="tab-content">
       <h2>오늘의 성경 말씀</h2>
       <div id="bibleResult">불러오는 중...</div>
       <button id="refreshBibleBtn">다시 보기</button>
+    </div>
+
+    <!-- 날씨 -->
+    <div id="weather-section" class="tab-content">
+      <h2>오늘의 날씨</h2>
+      <input type="text" id="weatherCity" placeholder="도시 이름">
+      <button id="saveWeatherBtn">저장</button>
+      <div id="weatherResult"></div>
+    </div>
+
+    <!-- 챗봇 -->
+    <div class="chat-container">
+      <h1>{{ name }}님의 챗봇</h1>
+      <div id="chat-section">
+        <form id="chat-form">
+          <input type="text" id="messageInput" placeholder="질문을 입력하세요">
+          <input type="submit" value="전송">
+        </form>
+        <div class="reply" id="replyBox"></div>
+      </div>
     </div>
   </div>
 
   <script src="{{ url_for('static', filename='script.js') }}"></script>
   <script>
-    // 시계
-    function updateClock() {
-      document.getElementById('clock').textContent = new Date().toLocaleTimeString();
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
+    // 탭 전환
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    const tabContents = document.querySelectorAll(".tab-content");
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const target = btn.dataset.target;
+        tabContents.forEach(tc => tc.classList.remove("active"));
+        document.getElementById(target).classList.add("active");
+      });
+    });
+
+    // 초기 활성 탭: 과제
+    document.getElementById("assignments-section").classList.add("active");
   </script>
 </body>
 </html>

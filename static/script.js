@@ -78,6 +78,14 @@ async function loadWeather() {
     document.getElementById("weatherResult").innerText = data.weather;
   }
 }
+// --- 시계 ---
+function updateClock() {
+  const now = new Date();
+  const timeString = now.toLocaleTimeString("ko-KR", { hour12: false });
+  document.getElementById("clock").innerText = timeString;
+}
+setInterval(updateClock, 1000);
+updateClock();
 
 document.getElementById("saveWeatherBtn").addEventListener("click", async () => {
   const city = document.getElementById("weatherCity").value;

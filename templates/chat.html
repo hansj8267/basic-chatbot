@@ -1,38 +1,42 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>{{ name }}님의 챗봇</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <title>승진의 챗봇</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
-  <div class="sidebar">
-    <h2>{{ name }}님</h2>
-    <button onclick="showScreen('chat')">챗봇</button>
-    <button onclick="showScreen('assignments')">과제</button>
-    <button onclick="showScreen('weather')">날씨</button>
+  <div class="main-container">
+    <div class="sidebar">
+      <button onclick="showScreen('chat')">챗봇</button>
+      <button onclick="showScreen('assignments')">과제</button>
+      <button onclick="showScreen('time')">시간</button>
+    </div>
+
+    <div class="chat-area">
+      <h2 id="welcome-name">님, 챗봇에 오신 것을 환영합니다!</h2>
+
+      <div id="chat-screen" class="screen">
+        <form id="chat-form">
+          <input id="messageInput" placeholder="질문을 입력하세요">
+          <button type="submit">전송</button>
+        </form>
+        <div id="replyBox"></div>
+      </div>
+
+      <div id="assignments-screen" class="screen" style="display:none;">
+        <h3>등록된 과제</h3>
+        <div id="assignmentsBox"></div>
+      </div>
+
+      <div id="time-screen" class="screen" style="display:none;">
+        <h3>현재 시간</h3>
+        <div id="timeBox"></div>
+      </div>
+    </div>
   </div>
 
-  <div class="main">
-    <div id="chat-screen">
-      <form id="chat-form">
-        <input type="text" id="messageInput" placeholder="질문을 입력하세요">
-        <input type="submit" value="전송">
-      </form>
-      <div id="replyBox" class="reply"></div>
-    </div>
-
-    <div id="assignments-screen" class="screen">
-      <h2>등록된 과제</h2>
-      <div id="assignmentsBox"></div>
-    </div>
-
-    <div id="weather-screen" class="screen">
-      <h2>저장된 날씨 위치</h2>
-      <div id="weatherBox"></div>
-    </div>
-  </div>
-
-  <script src="/static/chat.js"></script>
+  <script src="../static/chat.js"></script>
 </body>
 </html>

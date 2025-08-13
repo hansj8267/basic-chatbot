@@ -169,6 +169,28 @@ def save_weather():
     conn.close()
     return jsonify({"status": "ok"})
 
+@app.route("/api/fortune")
+def get_fortune():
+    fortunes = [
+        "오늘은 당신에게 큰 기회가 찾아올 것입니다.",
+        "작은 일에도 감사함을 느끼는 하루가 되세요.",
+        "예상치 못한 좋은 소식이 찾아옵니다.",
+        "오늘은 휴식과 충전이 필요한 날입니다.",
+        "당신의 노력이 결실을 맺을 것입니다."
+    ]
+    return jsonify({"fortune": random.choice(fortunes)})
+
+# --- 랜덤 성경 말씀 API ---
+@app.route("/api/bible")
+def get_bible_verse():
+    verses = [
+        "요한복음 3:16 - 하나님이 세상을 이처럼 사랑하사 독생자를 주셨으니...",
+        "시편 23:1 - 여호와는 나의 목자시니 내가 부족함이 없으리로다.",
+        "빌립보서 4:13 - 내게 능력 주시는 자 안에서 내가 모든 것을 할 수 있느니라.",
+        "잠언 3:5 - 너는 마음을 다하여 여호와를 신뢰하고...",
+        "이사야 41:10 - 두려워하지 말라 내가 너와 함께 함이라..."
+    ]
+    return jsonify({"verse": random.choice(verses)})
 # --- 실행 ---
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))

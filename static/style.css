@@ -1,26 +1,82 @@
+/* --- 전체 배경 --- */
 body {
-    margin:0; font-family: Arial, sans-serif;
-    display:flex; height:100vh;
-  }
-  
-  .sidebar {
-    width:150px; background:#87ceeb; display:flex; flex-direction:column;
-    padding:10px; box-sizing:border-box;
-  }
-  
-  .sidebar button {
-    margin-bottom:10px; padding:10px; border:none; border-radius:5px;
-    cursor:pointer; background:#fff;
-  }
-  
-  .sidebar button:hover { background:#00bfff; color:#fff; }
-  
-  .main-content {
-    flex:1; padding:20px; box-sizing:border-box; background:linear-gradient(to bottom, #f0f8ff, #ffffff);
-  }
-  
-  .screen { display:none; }
-  
-  input, button { margin:5px; padding:5px; }
-  #replyBox, #assignmentsBox, #verseBox, #weatherBox { margin-top:10px; }
-  
+  margin: 0;
+  font-family: 'Nanum Pen Script', cursive;
+  background: linear-gradient(to bottom, #87ceeb, #ffffff);
+  display: flex;
+  height: 100vh;
+}
+
+/* --- 사이드바 --- */
+.sidebar {
+  width: 200px;
+  background: rgba(255,255,255,0.9);
+  padding: 20px;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.sidebar h2 {
+  margin-bottom: 30px;
+}
+
+.sidebar button {
+  margin-bottom: 15px;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #87ceeb;
+  color: white;
+  font-size: 16px;
+}
+
+.sidebar button:hover {
+  background-color: #00bfff;
+}
+
+/* --- 메인 화면 --- */
+.main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 50px;
+  overflow-y: auto;
+}
+
+/* --- 챗봇 화면 --- */
+#chat-screen {
+  width: 400px;
+}
+
+input[type="text"] {
+  width: 70%;
+  padding: 10px;
+  margin-right: 10px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+input[type="submit"] {
+  padding: 10px 15px;
+  border-radius: 20px;
+  border: none;
+  background-color: #87ceeb;
+  color: white;
+  cursor: pointer;
+}
+
+.reply {
+  margin-top: 20px;
+  min-height: 30px;
+}
+
+/* --- 스크린 전환 --- */
+.screen {
+  display: none;
+}

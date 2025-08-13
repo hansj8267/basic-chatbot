@@ -1,13 +1,113 @@
-/* 전체 화면 레이아웃 */
+/* 기존 로그인 & 챗봇 스타일 그대로 */
 body {
   margin: 0;
   font-family: 'Nanum Pen Script', cursive;
   background: linear-gradient(to bottom, #87ceeb, #ffffff);
-  display: flex;
-  height: 100vh;
+  display: flex; /* flex로 변경 */
+  justify-content: flex-start; /* 왼쪽 정렬 */
+  align-items: flex-start;
+  min-height: 100vh;
+  padding-top: 50px;
 }
 
-/* 사이드바 */
+/* 로그인 화면 */
+.login-body {
+  justify-content: center;
+  align-items: center;
+}
+.login-container {
+  background: rgba(255,255,255,0.9);
+  padding: 30px;
+  border-radius: 25px;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+}
+.login-container input {
+  display: block;
+  width: 80%;
+  margin: 10px auto;
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+/* 챗봇 화면 */
+.chat-container {
+  background: rgba(255,255,255,0.9);
+  padding: 30px;
+  border-radius: 25px;
+  width: 400px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+  text-align: center;
+  margin: 50px;
+}
+
+.chat-container h1 {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+#chat-form input[type="text"] {
+  width: 80%;
+  padding: 10px 15px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+#chat-form input[type="submit"] {
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: none;
+  background-color: #87ceeb;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  margin-left: 5px;
+  margin-top: 20px;
+}
+#chat-form input[type="submit"]:hover {
+  background-color: #00bfff;
+}
+
+.reply {
+  margin-top: 15px;
+  font-size: 20px;
+  min-height: 30px;
+  text-align: left;
+}
+
+#assignmentsBox {
+  margin-top: 15px;
+  text-align: left;
+}
+
+.assignment-card {
+  background: #f0f8ff;
+  padding: 10px 15px;
+  border-radius: 15px;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.delete-btn:hover {
+  background: #ff1a1a;
+}
+
+/* 사이드바 추가 */
 .sidebar {
   width: 260px;
   background-color: rgba(44, 62, 80, 0.9);
@@ -15,13 +115,11 @@ body {
   padding: 20px;
   box-sizing: border-box;
   overflow-y: auto;
-}
-
-.sidebar .section {
-  margin-bottom: 25px;
+  height: 100vh;
 }
 
 .sidebar h2 {
+  font-size: 18px;
   border-bottom: 1px solid rgba(255,255,255,0.3);
   padding-bottom: 5px;
   margin-bottom: 10px;
@@ -35,20 +133,6 @@ body {
   border: none;
 }
 
-/* 메인 콘텐츠 */
-.main-content {
-  flex: 1;
-  padding: 20px;
-  overflow-y: auto;
-}
-
-/* 기존 chat-container 스타일 유지 */
-.chat-container {
-  background: rgba(255,255,255,0.9);
-  padding: 30px;
-  border-radius: 25px;
-  width: 400px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-  text-align: center;
-  margin: auto;
+.section {
+  margin-bottom: 25px;
 }

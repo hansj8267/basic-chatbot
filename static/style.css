@@ -1,109 +1,72 @@
+/* 공통 배경 */
 body {
   margin: 0;
   font-family: 'Nanum Pen Script', cursive;
   background: linear-gradient(to bottom, #87ceeb, #ffffff);
 }
 
+/* 로그인 */
 .login-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
   height: 100vh;
 }
-
 .login-container input, .login-container button {
-  margin: 5px 0;
-  padding: 10px;
-  border-radius: 15px;
-  border: 1px solid #ccc;
-  font-size: 16px;
+  margin: 6px 0; padding: 10px; border-radius: 15px; border: 1px solid #ccc; font-size: 16px;
 }
-
 .login-container button {
-  background-color: #87ceeb;
-  color: white;
-  border: none;
-  cursor: pointer;
+  background-color: #87ceeb; color: #fff; border: none; cursor: pointer;
 }
+.login-container button:hover { background:#00bfff; }
 
-.main-container {
-  display: flex;
-  min-height: 100vh;
-}
+/* 메인 레이아웃 */
+.main-container { display: flex; min-height: 100vh; }
 
+/* 사이드바 */
 .sidebar {
-  width: 100px;
-  background-color: rgba(255,255,255,0.9);
-  padding: 20px;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
+  width: 200px; background: rgba(255,255,255,0.9);
+  padding: 20px; box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  display: flex; flex-direction: column; gap: 12px;
 }
-
+.sidebar h2 { margin: 0 0 12px; }
 .sidebar button {
-  margin: 10px 0;
-  padding: 10px;
-  border: none;
-  border-radius: 15px;
-  background-color: #87ceeb;
-  color: white;
-  cursor: pointer;
+  padding: 10px; border: none; border-radius: 12px;
+  background: #87ceeb; color: #fff; cursor: pointer;
 }
+.sidebar button:hover { background:#00bfff; }
 
-.sidebar button:hover { background-color: #00bfff; }
-
+/* 중앙 챗 영역 — 진짜 중앙 정렬 */
 .chat-area {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* 수직 중앙 */
-  align-items: center;     /* 수평 중앙 */
-  padding: 20px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 24px;
 }
 
-.screen {
-  width: 100%;
-  max-width: 500px;
-}
+/* 화면 카드 너비 */
+.screen { width: 100%; max-width: 520px; }
 
+/* 폼/입력 */
 #chat-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: flex; gap: 10px; width: 100%; justify-content: center;
 }
-
 #messageInput {
-  width: 80%;
-  padding: 10px;
-  border-radius: 20px;
-  border: 1px solid #ccc;
+  flex: 1; max-width: 360px;
+  padding: 10px 14px; border-radius: 20px; border: 1px solid #ccc;
 }
-
-#replyBox {
-  margin-top: 15px;
-  font-size: 18px;
-  min-height: 30px;
-  text-align: left;
+#chat-form button {
+  padding: 10px 16px; border-radius: 20px; border: none;
+  background: #87ceeb; color: #fff; cursor: pointer;
 }
+#chat-form button:hover { background:#00bfff; }
 
+#replyBox { margin-top: 14px; font-size: 18px; min-height: 28px; text-align: left; }
+
+/* 과제 카드 */
 .assignment-card {
-  background: #f0f8ff;
-  padding: 10px 15px;
-  border-radius: 15px;
-  margin-bottom: 10px;
-  position: relative;
+  background:#f0f8ff; padding: 10px 15px; border-radius: 12px; margin-bottom: 10px; position: relative;
 }
-
 .delete-btn {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  background: #ff4d4d;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 12px;
+  position: absolute; top: 10px; right: 12px;
+  background:#ff4d4d; color:#fff; border:none; padding:5px 10px; border-radius:10px; cursor:pointer; font-size:12px;
 }
+.delete-btn:hover { background:#ff1a1a; }

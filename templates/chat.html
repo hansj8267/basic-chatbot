@@ -3,27 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <title>{{ name }}님의 챗봇</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <div class="sidebar">
-    <button onclick="showScreen('chat')">챗봇</button>
-    <button onclick="showScreen('assignments')">과제</button>
-    <button onclick="showScreen('weather')">날씨</button>
-  </div>
+  <div class="chat-container">
+    <h1>{{ name }}님의 챗봇</h1>
 
-  <div class="main-content">
-    <div id="chat" class="screen">
-      <h2>챗봇</h2>
-      <div id="replyBox"></div>
+    <!-- 챗봇 -->
+    <div id="chat-section">
       <form id="chat-form">
         <input type="text" id="messageInput" placeholder="질문을 입력하세요">
         <input type="submit" value="전송">
       </form>
+      <div class="reply" id="replyBox"></div>
     </div>
 
-    <div id="assignments" class="screen" style="display:none;">
-      <h2>과제</h2>
+    <!-- 과제 -->
+    <div id="assignments-section">
+      <h2>등록된 과제</h2>
       <div id="assignmentsBox"></div>
       <form id="assignment-form">
         <input type="date" id="assignmentDate" required>
@@ -32,8 +30,9 @@
       </form>
     </div>
 
-    <div id="weather" class="screen" style="display:none;">
-      <h2>날씨</h2>
+    <!-- 날씨 -->
+    <div id="weather-section">
+      <h2>오늘의 날씨</h2>
       <input type="text" id="weatherCity" placeholder="도시 이름">
       <button id="saveWeatherBtn">저장</button>
       <div id="weatherResult"></div>

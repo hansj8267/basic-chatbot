@@ -1,11 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
-import sqlite3, os, datetime, random, requests, urllib.parse
+import sqlite3, os, requests, urllib.parse
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24)
+app.secret_key = os.urandom(24)  # 세션 암호화 키
 
-API_KEY = "6db5463fa2ed35f609952d658b208a34"  # OpenWeather API 키
+# --- API 키 (OpenWeather) ---
+API_KEY = "6db5463fa2ed35f609952d658b208a34"
 
+# --- DB 경로 ---
 DB_PATH = "chatbot.db"
 
 # --- DB 초기화 ---
@@ -34,7 +36,7 @@ def init_db():
 
 init_db()
 
-# --- 날씨 함수 ---
+# --- 좌표 가져오기 ---
 def get_coords(city):
     city_encoded = urllib.parse.quote(city)
     url = f"http://api.openweathermap.org/geo/1.0/direct?q={city_encoded}&limit=1&appid={API_KEY}"
@@ -44,6 +46,7 @@ def get_coords(city):
         return data["lat"], data["lon"]
     return None, None
 
+# --- 날씨 정보 가져오기 ---
 def get_weather(city):
     lat, lon = get_coords(city)
     if lat is None:
@@ -54,35 +57,41 @@ def get_weather(city):
         data = response.json()
         desc = data["weather"][0]["description"]
         temp = data["main"]["temp"]
-        return f"{city}의 현재 날씨: {desc}, 온도: {temp}°C"
+        return f"{desc}, 온도: {temp}°C"
     return "날씨 정보를 가져오는데 실패했습니다."
 
 # --- 로그인 ---
-@app.route("/", methods=["GET","POST"])
+@app.route("/", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
         name = request.form["name"]
+
         conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
         c.execute("SELECT * FROM users WHERE username=?", (username,))
         user = c.fetchone()
+
         if not user:
+            # 신규 유저 생성
             c.execute("INSERT INTO users (username,password,name) VALUES (?,?,?)",
-                      (username,password,name))
+                      (username, password, name))
             conn.commit()
             user_id = c.lastrowid
         else:
-            if user[2]!=password:
+            # 기존 유저 로그인
+            if user[2] != password:
                 conn.close()
                 return "비밀번호가 틀렸습니다."
             user_id = user[0]
             name = user[3]
+
         session["user_id"] = user_id
         session["name"] = name
         conn.close()
         return redirect(url_for("chat"))
+
     return render_template("login.html")
 
 # --- 챗봇 화면 ---
@@ -92,17 +101,18 @@ def chat():
         return redirect(url_for("login"))
     return render_template("chat.html", name=session["name"])
 
-# --- 과제 API ---
+# --- 과제 목록 조회 ---
 @app.route("/api/assignments")
 def get_assignments():
     user_id = session.get("user_id")
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute("SELECT id,date,task FROM assignments WHERE user_id=?", (user_id,))
-    tasks = [{"id":row[0],"date":row[1],"task":row[2]} for row in c.fetchall()]
+    tasks = [{"id": row[0], "date": row[1], "task": row[2]} for row in c.fetchall()]
     conn.close()
     return jsonify(tasks)
 
+# --- 과제 추가 ---
 @app.route("/api/assignments/add", methods=["POST"])
 def add_assignment():
     user_id = session.get("user_id")
@@ -111,11 +121,12 @@ def add_assignment():
     task = data.get("task")
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("INSERT INTO assignments (user_id,date,task) VALUES (?,?,?)", (user_id,date,task))
+    c.execute("INSERT INTO assignments (user_id,date,task) VALUES (?,?,?)", (user_id, date, task))
     conn.commit()
     conn.close()
-    return jsonify({"status":"ok"})
+    return jsonify({"status": "ok"})
 
+# --- 과제 삭제 ---
 @app.route("/api/assignments/delete", methods=["POST"])
 def delete_assignment():
     user_id = session.get("user_id")
@@ -123,12 +134,12 @@ def delete_assignment():
     task_id = data.get("id")
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("DELETE FROM assignments WHERE id=? AND user_id=?", (task_id,user_id))
+    c.execute("DELETE FROM assignments WHERE id=? AND user_id=?", (task_id, user_id))
     conn.commit()
     conn.close()
-    return jsonify({"status":"ok"})
+    return jsonify({"status": "ok"})
 
-# --- 날씨 API ---
+# --- 날씨 불러오기 ---
 @app.route("/api/weather")
 def get_user_weather():
     user_id = session.get("user_id")
@@ -139,9 +150,10 @@ def get_user_weather():
     conn.close()
     if row:
         city = row[0]
-        return jsonify({"city":city, "weather": get_weather(city)})
-    return jsonify({"city":None, "weather":None})
+        return jsonify({"city": city, "weather": get_weather(city)})
+    return jsonify({"city": None, "weather": None})
 
+# --- 날씨 저장 ---
 @app.route("/api/weather/save", methods=["POST"])
 def save_weather():
     user_id = session.get("user_id")
@@ -150,12 +162,13 @@ def save_weather():
     c = conn.cursor()
     c.execute("SELECT * FROM weather WHERE user_id=?", (user_id,))
     if c.fetchone():
-        c.execute("UPDATE weather SET city=? WHERE user_id=?", (city,user_id))
+        c.execute("UPDATE weather SET city=? WHERE user_id=?", (city, user_id))
     else:
-        c.execute("INSERT INTO weather (user_id,city) VALUES (?,?)", (user_id,city))
+        c.execute("INSERT INTO weather (user_id,city) VALUES (?,?)", (user_id, city))
     conn.commit()
     conn.close()
-    return jsonify({"status":"ok"})
+    return jsonify({"status": "ok"})
 
+# --- 실행 ---
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))

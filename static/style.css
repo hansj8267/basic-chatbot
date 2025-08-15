@@ -25,7 +25,7 @@ body {
   border-radius: 15px;
   border: none;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 25px;
   margin-right: 100px;
 }
 
@@ -37,7 +37,7 @@ body {
   width: 400px;
   box-shadow: 0 5px 20px rgba(0,0,0,0.2);
   text-align: center;
-  margin-right: 80px;
+  margin-right: 130px;
   margin-top: 130px;
 }
 
@@ -63,7 +63,7 @@ body {
 }
 #chat-form input[type="submit"]:hover { background-color: #00bfff; }
 
-.reply { margin-top: 15px; font-size: 20px; text-align: left; }
+.reply { margin-top: 15px; font-size: 25px; text-align: left; }
 
 .assignment-card {
   background: #f0f8ff;

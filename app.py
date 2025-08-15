@@ -26,25 +26,40 @@ init_db()
 # --- 로그인 페이지 ---
 @app.route("/", methods=["GET", "POST"])
 def login():
-    if request.method=="POST":
+    if request.method == "POST":
         name = request.form.get("name") or "게스트"
         session["name"] = name
         return redirect("/chat")
     return render_template("login.html")
 
 # --- 챗봇 페이지 ---
-@app.route("/chat")
+@app.route("/chat", methods=["GET", "POST"])
 def chat():
+    # POST로 로그인 요청이 들어왔을 경우 처리
+    if request.method == "POST":
+        name = request.form.get("name") or "게스트"
+        session["name"] = name
     name = session.get("name", "게스트")
     return render_template("chat.html", name=name)
 
 # --- 과제 API ---
 @app.route("/api/assignments")
 def get_assignments():
+    today = datetime.now().date()
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute("SELECT id,date,task,checked FROM assignments")
-    tasks = [{"id":r[0],"date":r[1],"task":r[2],"checked":bool(r[3])} for r in c.fetchall()]
+    tasks = []
+    for r in c.fetchall():
+        due_date = datetime.strptime(r[1], "%Y-%m-%d").date()
+        days_left = (due_date - today).days
+        tasks.append({
+            "id": r[0],
+            "date": r[1],
+            "task": r[2],
+            "checked": bool(r[3]),
+            "days_left": days_left
+        })
     conn.close()
     return jsonify(tasks)
 
@@ -54,9 +69,10 @@ def add_assignment():
     date, task = data.get("date"), data.get("task")
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("INSERT INTO assignments(date,task) VALUES (?,?)",(date,task))
-    conn.commit(); conn.close()
-    return jsonify({"status":"ok"})
+    c.execute("INSERT INTO assignments(date,task) VALUES (?,?)", (date, task))
+    conn.commit()
+    conn.close()
+    return jsonify({"status": "ok"})
 
 @app.route("/api/assignments/delete", methods=["POST"])
 def delete_assignment():
@@ -64,9 +80,10 @@ def delete_assignment():
     id = data.get("id")
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("DELETE FROM assignments WHERE id=?",(id,))
-    conn.commit(); conn.close()
-    return jsonify({"status":"ok"})
+    c.execute("DELETE FROM assignments WHERE id=?", (id,))
+    conn.commit()
+    conn.close()
+    return jsonify({"status": "ok"})
 
 @app.route("/api/assignments/check", methods=["POST"])
 def check_assignment():
@@ -74,41 +91,44 @@ def check_assignment():
     id = data.get("id")
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("UPDATE assignments SET checked = 1 - checked WHERE id=?",(id,))
-    conn.commit(); conn.close()
-    return jsonify({"status":"ok"})
+    c.execute("UPDATE assignments SET checked = 1 - checked WHERE id=?", (id,))
+    conn.commit()
+    conn.close()
+    return jsonify({"status": "ok"})
 
 # --- 날씨 API ---
 @app.route("/api/weather")
-
 def get_weather():
-    city = saved_city or "Seoul"
-    api_key = "YOUR_API_KEY"
-    url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}"
+    city = session.get("city", "Seoul")
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={WEATHER_API_KEY}"
     res = requests.get(url).json()
-    tempK = res["main"]["temp"]
-    return jsonify({"city": city, "tempK": tempK})
 
+    if "main" not in res:
+        return jsonify({"error": "도시를 찾을 수 없습니다."})
+
+    temp_k = res["main"]["temp"]
+    temp_c = round(temp_k - 273.15, 1)  # 섭씨 변환
+    return jsonify({"city": city, "tempC": temp_c})
 
 @app.route("/api/weather/save", methods=["POST"])
 def save_weather():
     city = request.get_json().get("city")
     session["city"] = city
-    return jsonify({"status":"ok"})
+    return jsonify({"status": "ok"})
 
-# --- 운세 API (임시 랜덤) ---
+# --- 운세 API ---
 @app.route("/api/fortune")
 def get_fortune():
-    fortunes = ["행운이 찾아옵니다.","오늘은 좋은 하루입니다.","조금 주의가 필요합니다."]
+    fortunes = ["행운이 찾아옵니다.", "오늘은 좋은 하루입니다.", "조금 주의가 필요합니다."]
     import random
     return jsonify({"fortune": random.choice(fortunes)})
 
-# --- 성경 말씀 API (임시) ---
+# --- 성경 말씀 API ---
 @app.route("/api/bible")
 def get_bible():
     verse = "태초에 하나님이 천지를 창조하시니라."
     reference = "창세기 1:1"
-    return jsonify({"verse":verse,"reference":reference})
+    return jsonify({"verse": verse, "reference": reference})
 
-if __name__=="__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT",5000)))
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))

@@ -97,24 +97,27 @@ def check_assignment():
     return jsonify({"status": "ok"})
 
 # --- 날씨 API ---
+# app.py
 @app.route("/api/weather")
 def get_weather():
     city = session.get("city", "Seoul")
-    url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={WEATHER_API_KEY}"
-    res = requests.get(url).json()
+    api_key = WEATHER_API_KEY
 
-    if "main" not in res:
-        return jsonify({"error": "도시를 찾을 수 없습니다."})
+    try:
+        url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}"
+        res = requests.get(url)
+        res.raise_for_status()
+        data = res.json()
 
-    temp_k = res["main"]["temp"]
-    temp_c = round(temp_k - 273.15, 1)  # 섭씨 변환
-    return jsonify({"city": city, "tempC": temp_c})
+        if "main" in data and "temp" in data["main"]:
+            tempK = data["main"]["temp"]
+            return jsonify({"city": city, "tempK": tempK})
+        else:
+            return jsonify({"error": "날씨 데이터를 찾을 수 없습니다."}), 400
 
-@app.route("/api/weather/save", methods=["POST"])
-def save_weather():
-    city = request.get_json().get("city")
-    session["city"] = city
-    return jsonify({"status": "ok"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 # --- 운세 API ---
 @app.route("/api/fortune")

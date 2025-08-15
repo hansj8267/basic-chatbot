@@ -6,19 +6,19 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)  # 세션 암호화 키
 
 
-@app.route("/chat", methods=["GET", "POST"])
-def chat():
+@app.route("/", methods=["GET", "POST"])
+def login():
     if request.method == "POST":
         name = request.form["name"]
-        # 로그인 성공 시 채팅 페이지 렌더링
-        return render_template("chat.html", name=name)
-    else:
-        # GET 요청이면 그냥 채팅 페이지 보여주기
-        return render_template("chat.html", name="게스트")
-
-@app.route("/")
-def login():
+        return redirect(url_for("chat", name=name))
     return render_template("login.html")
+
+
+@app.route("/chat")
+def chat():
+    name = request.args.get("name", "게스트")
+    return render_template("chat.html", name=name)
+
 
 # --- API 키 (OpenWeather) ---
 API_KEY = "6db5463fa2ed35f609952d658b208a34"

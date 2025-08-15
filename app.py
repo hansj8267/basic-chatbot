@@ -1,6 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+import sqlite3, os, requests, urllib.parse, random
+from datetime import datetime
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)  # 세션 암호화 키
+
 
 @app.route("/chat", methods=["GET", "POST"])
 def chat():

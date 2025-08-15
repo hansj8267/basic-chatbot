@@ -1,84 +1,68 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>{{ name }}님의 챗봇</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <title>{{ name }}님의 챗봇</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <!-- 사이드바 -->
-  <div class="sidebar">
-    <button class="tab-btn" data-target="assignments-section">📚</button>
-    <button class="tab-btn" data-target="fortune-section">🔮</button>
-    <button class="tab-btn" data-target="bible-section">📖</button>
-    <button class="tab-btn" data-target="weather-section">☀️</button>
-  </div>
-
-  <!-- 컨텐츠 영역 -->
-  <div class="content-container">
-    <!-- 과제 -->
-    <div id="assignments-section" class="tab-content">
-      <h2>등록된 과제</h2>
-      <div id="assignmentsBox"></div>
-      <form id="assignment-form">
-        <input type="date" id="assignmentDate" required>
-        <input type="text" id="assignmentTask" placeholder="과제명" required>
-        <input type="submit" value="추가">
-      </form>
+    <!-- 사이드바 -->
+    <div class="sidebar">
+        <div class="menu-item" onclick="showSection('chat')">💬</div>
+        <div class="menu-item" onclick="showSection('assignments')">📚</div>
+        <div class="menu-item" onclick="showSection('weather')">☀️</div>
+        <div class="menu-item" onclick="showSection('fortune')">🔮</div>
+        <div class="menu-item" onclick="showSection('verse')">📖</div>
     </div>
 
-    <!-- 운세 -->
-    <div id="fortune-section" class="tab-content">
-      <h2>오늘의 운세</h2>
-      <div id="fortuneResult">불러오는 중...</div>
-      <button id="refreshFortuneBtn">다시 보기</button>
+    <!-- 메인 콘텐츠 -->
+    <div class="content">
+        <!-- 챗봇 -->
+        <div id="section-chat" class="section active">
+            <h2>챗봇</h2>
+            <div id="chat-section">
+                <form id="chat-form">
+                    <input type="text" id="messageInput" placeholder="질문을 입력하세요">
+                    <input type="submit" value="전송">
+                </form>
+                <div class="reply" id="replyBox"></div>
+            </div>
+        </div>
+
+        <!-- 과제 -->
+        <div id="section-assignments" class="section">
+            <h2>등록된 과제</h2>
+            <div id="assignmentsBox"></div>
+            <form id="assignment-form">
+                <input type="date" id="assignmentDate" required>
+                <input type="text" id="assignmentTask" placeholder="과제명" required>
+                <input type="submit" value="추가">
+            </form>
+        </div>
+
+        <!-- 날씨 -->
+        <div id="section-weather" class="section">
+            <h2>오늘의 날씨</h2>
+            <input type="text" id="weatherCity" placeholder="도시 이름">
+            <button id="saveWeatherBtn">저장</button>
+            <div id="weatherResult"></div>
+        </div>
+
+        <!-- 운세 -->
+        <div id="section-fortune" class="section">
+            <h2>오늘의 운세</h2>
+            <div id="fortuneResult">불러오는 중...</div>
+            <button id="refreshFortuneBtn">다시 보기</button>
+        </div>
+
+        <!-- 오늘의 성경 구절 -->
+        <div id="section-verse" class="section">
+            <h2>오늘의 성경 구절</h2>
+            <div id="bibleResult">불러오는 중...</div>
+            <button id="refreshBibleBtn">다시 보기</button>
+        </div>
     </div>
 
-    <!-- 성경 말씀 -->
-    <div id="bible-section" class="tab-content">
-      <h2>오늘의 성경 말씀</h2>
-      <div id="bibleResult">불러오는 중...</div>
-      <button id="refreshBibleBtn">다시 보기</button>
-    </div>
-
-    <!-- 날씨 -->
-    <div id="weather-section" class="tab-content">
-      <h2>오늘의 날씨</h2>
-      <input type="text" id="weatherCity" placeholder="도시 이름">
-      <button id="saveWeatherBtn">저장</button>
-      <div id="weatherResult"></div>
-    </div>
-
-    <!-- 챗봇 -->
-    <div class="chat-container">
-      <h1>{{ name }}님의 챗봇</h1>
-      <div id="chat-section">
-        <form id="chat-form">
-          <input type="text" id="messageInput" placeholder="질문을 입력하세요">
-          <input type="submit" value="전송">
-        </form>
-        <div class="reply" id="replyBox"></div>
-      </div>
-    </div>
-  </div>
-
-  <script src="{{ url_for('static', filename='script.js') }}"></script>
-  <script>
-    // 탭 전환
-    const tabButtons = document.querySelectorAll(".tab-btn");
-    const tabContents = document.querySelectorAll(".tab-content");
-
-    tabButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const target = btn.dataset.target;
-        tabContents.forEach(tc => tc.classList.remove("active"));
-        document.getElementById(target).classList.add("active");
-      });
-    });
-
-    // 초기 활성 탭: 과제
-    document.getElementById("assignments-section").classList.add("active");
-  </script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

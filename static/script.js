@@ -62,7 +62,7 @@ async function loadWeather() {
   const data = await res.json();
   if(data.city){
     document.getElementById("weatherCity").value = data.city;
-    const tempF = (data.weather.temp * 9/5 + 32).toFixed(1);
+    const fahrenheit = ((data.tempK - 273.15) * 9/5 + 32).toFixed(1);
     document.getElementById("weatherResult").innerText = `${data.weather.description}, ${tempF}°F`;
   }
 }

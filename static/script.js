@@ -57,21 +57,29 @@ document.getElementById("assignment-form").addEventListener("submit", async e =>
 fetchAssignments();
 
 // --- 날씨 ---
+// 날씨
 async function loadWeather() {
   const res = await fetch("/api/weather");
   const data = await res.json();
-  if(data.city){
-    document.getElementById("weatherCity").value = data.city;
+  if (data.city && data.tempK) {
+    // Kelvin → Fahrenheit 변환
     const fahrenheit = ((data.tempK - 273.15) * 9/5 + 32).toFixed(1);
-    document.getElementById("weatherResult").innerText = `${data.weather.description}, ${tempF}°F`;
+    document.getElementById("weatherCity").value = data.city;
+    document.getElementById("weatherResult").innerText = `날씨: ${fahrenheit}°F`;
   }
 }
+
 document.getElementById("saveWeatherBtn").addEventListener("click", async () => {
   const city = document.getElementById("weatherCity").value;
-  await fetch("/api/weather/save", { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify({city}) });
+  await fetch("/api/weather/save", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ city })
+  });
   loadWeather();
 });
 loadWeather();
+
 
 // --- 운세 ---
 async function loadFortune() {

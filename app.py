@@ -80,15 +80,15 @@ def check_assignment():
 
 # --- 날씨 API ---
 @app.route("/api/weather")
+
 def get_weather():
-    city = session.get("city", "Seoul")
-    try:
-        res = requests.get(f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={WEATHER_API_KEY}&units=imperial")
-        data = res.json()
-        weather = {"temp": data["main"]["temp"], "description": data["weather"][0]["description"]}
-    except:
-        weather = {"temp":"-", "description":"불러오기 실패"}
-    return jsonify({"city":city,"weather":weather})
+    city = saved_city or "Seoul"
+    api_key = "YOUR_API_KEY"
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}"
+    res = requests.get(url).json()
+    tempK = res["main"]["temp"]
+    return jsonify({"city": city, "tempK": tempK})
+
 
 @app.route("/api/weather/save", methods=["POST"])
 def save_weather():

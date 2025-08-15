@@ -82,3 +82,47 @@ body {
   font-size: 12px;
 }
 .delete-btn:hover { background: #ff1a1a; }
+
+/* 로그인 화면 스타일 */
+.login-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #87ceeb, #ffffff);
+  font-family: 'Nanum Pen Script', cursive;
+}
+
+.login-box {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+  width: 300px;
+  text-align: center;
+}
+
+.login-box h1 {
+  margin-bottom: 20px;
+}
+
+.login-box input {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 12px;
+  border-radius: 15px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+.login-box input[type="submit"] {
+  background-color: #87ceeb;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.login-box input[type="submit"]:hover {
+  background-color: #00bfff;
+}

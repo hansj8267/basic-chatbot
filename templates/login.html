@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>로그인 - 승진의 챗봇</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <title>로그인</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body class="login-body">
-  <div class="login-container">
-    <h1>승진의 챗봇</h1>
-    <form method="POST" action="/">
-      <input type="text" name="username" placeholder="아이디" required><br>
-      <input type="password" name="password" placeholder="비밀번호" required><br>
-      <input type="text" name="name" placeholder="이름" required><br>
-      <input type="submit" value="로그인">
-    </form>
-  </div>
+    <div class="login-container">
+        <h2>로그인</h2>
+        <form action="/" method="POST">
+            <input type="text" name="username" placeholder="아이디" required>
+            <input type="password" name="password" placeholder="비밀번호" required>
+            <input type="text" name="name" placeholder="이름" required>
+            <button type="submit">로그인</button>
+        </form>
+    </div>
 </body>
 </html>

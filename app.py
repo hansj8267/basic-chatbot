@@ -4,26 +4,6 @@ import os
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
-@app.route("/", methods=["GET", "POST"])
-def login():
-    if request.method == "POST":
-        name = request.form["name"]
-        username = request.form["username"]
-        password = request.form["password"]
-        # 로그인 로직
-        return redirect(url_for("chat", name=name))
-    return render_template("login.html")
-
-@app.route("/chat")
-def chat():
-    name = request.args.get("name", "게스트")
-    return render_template("chat.html", name=name)
-
-if __name__ == "__main__":
-    app.run(debug=True)
-
-
-
 # --- API 키 (OpenWeather) ---
 API_KEY = "6db5463fa2ed35f609952d658b208a34"
 BIBLE_API_KEY = "be163d8b2d1c5fd2c46fe81f527a1e93"
@@ -81,46 +61,23 @@ def get_weather(city):
         return f"{desc}, 온도: {temp}°F"
     return "날씨 정보를 가져오는데 실패했습니다."
 
-# --- 로그인 ---
 @app.route("/", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
+        name = request.form["name"]
         username = request.form["username"]
         password = request.form["password"]
-        name = request.form["name"]
-
-        conn = sqlite3.connect(DB_PATH)
-        c = conn.cursor()
-        c.execute("SELECT * FROM users WHERE username=?", (username,))
-        user = c.fetchone()
-
-        if not user:
-            # 신규 유저 생성
-            c.execute("INSERT INTO users (username,password,name) VALUES (?,?,?)",
-                      (username, password, name))
-            conn.commit()
-            user_id = c.lastrowid
-        else:
-            # 기존 유저 로그인
-            if user[2] != password:
-                conn.close()
-                return "비밀번호가 틀렸습니다."
-            user_id = user[0]
-            name = user[3]
-
-        session["user_id"] = user_id
-        session["name"] = name
-        conn.close()
-        return redirect(url_for("chat"))
-
+        # 로그인 로직
+        return redirect(url_for("chat", name=name))
     return render_template("login.html")
 
-# --- 챗봇 화면 ---
 @app.route("/chat")
 def chat():
-    if "user_id" not in session:
-        return redirect(url_for("login"))
-    return render_template("chat.html", name=session["name"])
+    name = request.args.get("name", "게스트")
+    return render_template("chat.html", name=name)
+
+if __name__ == "__main__":
+    app.run(debug=True)
 
 # --- 과제 목록 조회 ---
 @app.route("/api/assignments")

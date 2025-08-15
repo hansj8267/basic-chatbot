@@ -4,29 +4,43 @@ body {
   background: linear-gradient(to bottom, #87ceeb, #ffffff);
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center; /* 중앙 정렬 */
   min-height: 100vh;
-  padding-top: 50px;
 }
 
+/* 전체 레이아웃 */
 .chat-wrapper {
   display: flex;
+  width: 100%;
+  max-width: 1200px; /* 중앙 콘텐츠 폭 제한 */
 }
 
 /* 사이드바 */
 .sidebar {
   display: flex;
   flex-direction: column;
-  margin-right: 100px;
+  align-items: center; /* 아이콘 가운데 정렬 */
+  position: fixed; /* 왼쪽 고정 */
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
 }
+
 .sidebar button {
-  margin: 5px 0;
+  margin: 10px 0;
   padding: 10px;
   border-radius: 15px;
   border: none;
   cursor: pointer;
   font-size: 25px;
-  margin-right: 100px;
+}
+
+/* 콘텐츠 영역 (챗봇, 과제, 날씨, 운세) */
+.content-area {
+  flex: 1;
+  display: flex;
+  justify-content: center; /* 중앙 정렬 */
+  align-items: center;     /* 세로 중앙 */
 }
 
 /* 챗봇 컨테이너 */
@@ -37,8 +51,6 @@ body {
   width: 400px;
   box-shadow: 0 5px 20px rgba(0,0,0,0.2);
   text-align: center;
-  margin-right: 130px;
-  margin-top: 130px;
 }
 
 .hidden { display: none; }

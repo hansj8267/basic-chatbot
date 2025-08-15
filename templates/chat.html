@@ -7,18 +7,11 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-<div class="chat-container">
-  <div class="sidebar">
-    <button onclick="showSection('assignments')">📌 과제</button>
-    <button onclick="showSection('weather')">🌤 날씨</button>
-    <button onclick="showSection('fortune')">🔮 운세</button>
-    <button onclick="showSection('bible')">📖 성경</button>
-  </div>
+  <div class="chat-container">
+    <h1>{{ name }}님의 챗봇</h1>
 
-  <div class="main-content">
     <!-- 챗봇 -->
     <div id="chat-section">
-      <h1>{{ name }}님의 챗봇</h1>
       <form id="chat-form">
         <input type="text" id="messageInput" placeholder="질문을 입력하세요">
         <input type="submit" value="전송">
@@ -27,40 +20,39 @@
     </div>
 
     <!-- 과제 -->
-    <div id="assignments" class="section">
+    <div id="assignments-section">
       <h2>등록된 과제</h2>
-      <input type="date" id="filterDate">
-      <div id="assignmentsBox">불러오는 중...</div>
+      <div id="assignmentsBox"></div>
       <form id="assignment-form">
+        <input type="date" id="assignmentDate" required>
         <input type="text" id="assignmentTask" placeholder="과제명" required>
         <input type="submit" value="추가">
       </form>
     </div>
 
     <!-- 날씨 -->
-    <div id="weather" class="section">
+    <div id="weather-section">
       <h2>오늘의 날씨</h2>
       <input type="text" id="weatherCity" placeholder="도시 이름">
       <button id="saveWeatherBtn">저장</button>
-      <div id="weatherResult">불러오는 중...</div>
+      <div id="weatherResult"></div>
     </div>
 
     <!-- 운세 -->
-    <div id="fortune" class="section">
+    <div id="fortune-section">
       <h2>오늘의 운세</h2>
       <div id="fortuneResult">불러오는 중...</div>
       <button id="refreshFortuneBtn">다시 보기</button>
     </div>
 
-    <!-- 성경 -->
-    <div id="bible" class="section">
+    <!-- 성경 말씀 -->
+    <div id="bible-section">
       <h2>오늘의 성경 말씀</h2>
       <div id="bibleResult">불러오는 중...</div>
       <button id="refreshBibleBtn">다시 보기</button>
     </div>
   </div>
-</div>
 
-<script src="{{ url_for('static', filename='script.js') }}"></script>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <div class="chat-wrapper">
+    <div class="chat-wrapper">
     <!-- 사이드바 -->
     <div class="sidebar">
       <button id="chatBtn">💬 챗봇</button>
@@ -16,10 +16,10 @@
       <button id="fortuneBtn">🔮 운세</button>
     </div>
 
-    <!-- 메인 컨텐츠 -->
-    <div class="chat-container">
+    <!-- 콘텐츠 영역 (중앙 정렬) -->
+    <div class="content-area">
       <!-- 챗봇 -->
-      <div id="chat-section">
+      <div id="chat-section" class="chat-container">
         <h1>{{ name }}님의 챗봇</h1>
         <form id="chat-form">
           <input type="text" id="messageInput" placeholder="질문을 입력하세요">

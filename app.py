@@ -1,9 +1,20 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
-import sqlite3, os, requests, urllib.parse, random
-from datetime import datetime
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24)  # 세션 암호화 키
+
+@app.route("/chat", methods=["GET", "POST"])
+def chat():
+    if request.method == "POST":
+        name = request.form["name"]
+        # 로그인 성공 시 채팅 페이지 렌더링
+        return render_template("chat.html", name=name)
+    else:
+        # GET 요청이면 그냥 채팅 페이지 보여주기
+        return render_template("chat.html", name="게스트")
+
+@app.route("/")
+def login():
+    return render_template("login.html")
 
 # --- API 키 (OpenWeather) ---
 API_KEY = "6db5463fa2ed35f609952d658b208a34"

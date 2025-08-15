@@ -1,9 +1,10 @@
-/* 로그인 중앙 */
 .login-body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100vh; /* 세로 전체 중앙 */
+  background: linear-gradient(to bottom, #87ceeb, #ffffff);
+  font-family: 'Nanum Pen Script', cursive;
 }
 
 /* 사이드바 */

@@ -7,49 +7,52 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <div class="chat-container">
-    <h1>{{ name }}님의 챗봇</h1>
-
-    <!-- 챗봇 -->
-    <div id="chat-section">
-      <form id="chat-form">
-        <input type="text" id="messageInput" placeholder="질문을 입력하세요">
-        <input type="submit" value="전송">
-      </form>
-      <div class="reply" id="replyBox"></div>
+  <div class="chat-wrapper">
+    <!-- 사이드바 -->
+    <div class="sidebar">
+      <button id="chatBtn">💬 챗봇</button>
+      <button id="assignmentBtn">📝 과제</button>
+      <button id="weatherBtn">☀️ 날씨</button>
+      <button id="fortuneBtn">🔮 운세</button>
     </div>
 
-    <!-- 과제 -->
-    <div id="assignments-section">
-      <h2>등록된 과제</h2>
-      <div id="assignmentsBox"></div>
-      <form id="assignment-form">
-        <input type="date" id="assignmentDate" required>
-        <input type="text" id="assignmentTask" placeholder="과제명" required>
-        <input type="submit" value="추가">
-      </form>
-    </div>
+    <!-- 메인 컨텐츠 -->
+    <div class="chat-container">
+      <!-- 챗봇 -->
+      <div id="chat-section">
+        <h1>{{ name }}님의 챗봇</h1>
+        <form id="chat-form">
+          <input type="text" id="messageInput" placeholder="질문을 입력하세요">
+          <input type="submit" value="전송">
+        </form>
+        <div class="reply" id="replyBox"></div>
+      </div>
 
-    <!-- 날씨 -->
-    <div id="weather-section">
-      <h2>오늘의 날씨</h2>
-      <input type="text" id="weatherCity" placeholder="도시 이름">
-      <button id="saveWeatherBtn">저장</button>
-      <div id="weatherResult"></div>
-    </div>
+      <!-- 과제 -->
+      <div id="assignments-section" class="hidden">
+        <h2>등록된 과제</h2>
+        <div id="assignmentsBox">task 기능을 불러오는 중...</div>
+        <form id="assignment-form">
+          <input type="date" id="assignmentDate" required>
+          <input type="text" id="assignmentTask" placeholder="과제명" required>
+          <input type="submit" value="추가">
+        </form>
+      </div>
 
-    <!-- 운세 -->
-    <div id="fortune-section">
-      <h2>오늘의 운세</h2>
-      <div id="fortuneResult">불러오는 중...</div>
-      <button id="refreshFortuneBtn">다시 보기</button>
-    </div>
+      <!-- 날씨 -->
+      <div id="weather-section" class="hidden">
+        <h2>오늘의 날씨</h2>
+        <input type="text" id="weatherCity" placeholder="도시 이름">
+        <button id="saveWeatherBtn">저장</button>
+        <div id="weatherResult">불러오는 중...</div>
+      </div>
 
-    <!-- 성경 말씀 -->
-    <div id="bible-section">
-      <h2>오늘의 성경 말씀</h2>
-      <div id="bibleResult">불러오는 중...</div>
-      <button id="refreshBibleBtn">다시 보기</button>
+      <!-- 운세 -->
+      <div id="fortune-section" class="hidden">
+        <h2>오늘의 운세</h2>
+        <div id="fortuneResult">불러오는 중...</div>
+        <button id="refreshFortuneBtn">다시 보기</button>
+      </div>
     </div>
   </div>
 

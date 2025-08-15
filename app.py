@@ -1,11 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
-import sqlite3, os, requests, urllib.parse
+import sqlite3, os, requests, urllib.parse, random
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)  # 세션 암호화 키
 
 # --- API 키 (OpenWeather) ---
 API_KEY = "6db5463fa2ed35f609952d658b208a34"
+BIBLE_API_KEY = "be163d8b2d1c5fd2c46fe81f527a1e93"
 
 # --- DB 경로 ---
 DB_PATH = "chatbot.db"
@@ -46,18 +48,18 @@ def get_coords(city):
         return data["lat"], data["lon"]
     return None, None
 
-# --- 날씨 정보 가져오기 ---
+# --- 날씨 정보 가져오기 (화씨) ---
 def get_weather(city):
     lat, lon = get_coords(city)
     if lat is None:
         return f"'{city}'의 좌표를 찾을 수 없습니다."
-    url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API_KEY}&units=metric&lang=kr"
+    url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API_KEY}&units=imperial&lang=kr"
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
         desc = data["weather"][0]["description"]
         temp = data["main"]["temp"]
-        return f"{desc}, 온도: {temp}°C"
+        return f"{desc}, 온도: {temp}°F"
     return "날씨 정보를 가져오는데 실패했습니다."
 
 # --- 로그인 ---
@@ -169,6 +171,7 @@ def save_weather():
     conn.close()
     return jsonify({"status": "ok"})
 
+# --- 운세 ---
 @app.route("/api/fortune")
 def get_fortune():
     fortunes = [
@@ -180,17 +183,22 @@ def get_fortune():
     ]
     return jsonify({"fortune": random.choice(fortunes)})
 
-# --- 랜덤 성경 말씀 API ---
-@app.route("/api/bible")
-def get_bible_verse():
-    verses = [
-        "요한복음 3:16 - 하나님이 세상을 이처럼 사랑하사 독생자를 주셨으니...",
-        "시편 23:1 - 여호와는 나의 목자시니 내가 부족함이 없으리로다.",
-        "빌립보서 4:13 - 내게 능력 주시는 자 안에서 내가 모든 것을 할 수 있느니라.",
-        "잠언 3:5 - 너는 마음을 다하여 여호와를 신뢰하고...",
-        "이사야 41:10 - 두려워하지 말라 내가 너와 함께 함이라..."
-    ]
-    return jsonify({"verse": random.choice(verses)})
+# --- 성경 구절 (Bible API) ---
+@app.route("/api/verse")
+def get_verse():
+    try:
+        url = "https://api.scripture.api.bible/v1/bibles/krv/verses/JHN.1.1"
+        headers = {"api-key": BIBLE_API_KEY}
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            content = data["data"]["content"]
+            return jsonify({"verse": content})
+        else:
+            return jsonify({"verse": "성경 구절을 가져오는데 실패했습니다."})
+    except Exception as e:
+        return jsonify({"verse": f"오류 발생: {e}"})
+
 # --- 실행 ---
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))

@@ -1,180 +1,89 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import os
+import sqlite3
+import requests
+import urllib.parse
+import random
+from datetime import datetime
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24)
+app.secret_key = os.urandom(24)  # 세션 암호화 키
 
-# --- API 키 (OpenWeather) ---
-API_KEY = "6db5463fa2ed35f609952d658b208a34"
-BIBLE_API_KEY = "be163d8b2d1c5fd2c46fe81f527a1e93"
+DB_PATH = "users.db"
 
-# --- DB 경로 ---
-DB_PATH = "chatbot.db"
-
-# --- DB 초기화 ---
+# ---------- DB 초기화 ----------
 def init_db():
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("""CREATE TABLE IF NOT EXISTS users (
-                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                 username TEXT UNIQUE,
-                 password TEXT,
-                 name TEXT
-                 )""")
-    c.execute("""CREATE TABLE IF NOT EXISTS assignments (
-                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                 user_id INTEGER,
-                 date TEXT,
-                 task TEXT
-                 )""")
-    c.execute("""CREATE TABLE IF NOT EXISTS weather (
-                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                 user_id INTEGER,
-                 city TEXT
-                 )""")
-    conn.commit()
-    conn.close()
+    if not os.path.exists(DB_PATH):
+        conn = sqlite3.connect(DB_PATH)
+        c = conn.cursor()
+        c.execute("""
+            CREATE TABLE users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                password TEXT NOT NULL
+            )
+        """)
+        conn.commit()
+        conn.close()
 
 init_db()
 
-# --- 좌표 가져오기 ---
-def get_coords(city):
-    city_encoded = urllib.parse.quote(city)
-    url = f"http://api.openweathermap.org/geo/1.0/direct?q={city_encoded}&limit=1&appid={API_KEY}"
-    response = requests.get(url)
-    if response.status_code == 200 and response.json():
-        data = response.json()[0]
-        return data["lat"], data["lon"]
-    return None, None
-
-# --- 날씨 정보 가져오기 (화씨) ---
-def get_weather(city):
-    lat, lon = get_coords(city)
-    if lat is None:
-        return f"'{city}'의 좌표를 찾을 수 없습니다."
-    url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API_KEY}&units=imperial&lang=kr"
-    response = requests.get(url)
-    if response.status_code == 200:
-        data = response.json()
-        desc = data["weather"][0]["description"]
-        temp = data["main"]["temp"]
-        return f"{desc}, 온도: {temp}°F"
-    return "날씨 정보를 가져오는데 실패했습니다."
-
+# ---------- 로그인 ----------
 @app.route("/", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        name = request.form["name"]
-        username = request.form["username"]
-        password = request.form["password"]
-        # 로그인 로직
-        return redirect(url_for("chat", name=name))
+        name = request.form.get("name")
+        password = request.form.get("password")
+
+        conn = sqlite3.connect(DB_PATH)
+        c = conn.cursor()
+        c.execute("SELECT * FROM users WHERE name=? AND password=?", (name, password))
+        user = c.fetchone()
+        conn.close()
+
+        if user:
+            session["name"] = name
+            return redirect(url_for("chat"))
+        else:
+            return render_template("login.html", error="이름 또는 비밀번호가 잘못되었습니다.")
+
     return render_template("login.html")
 
+# ---------- 회원가입 ----------
+@app.route("/register", methods=["POST"])
+def register():
+    name = request.form.get("name")
+    password = request.form.get("password")
+
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("INSERT INTO users (name, password) VALUES (?, ?)", (name, password))
+    conn.commit()
+    conn.close()
+
+    session["name"] = name
+    return redirect(url_for("chat"))
+
+# ---------- 채팅 ----------
 @app.route("/chat")
 def chat():
-    name = request.args.get("name", "게스트")
+    name = session.get("name", "게스트")
     return render_template("chat.html", name=name)
+
+# ---------- 로그아웃 ----------
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
+
+# ---------- 날씨 API ----------
+API_KEY = "6db5463fa2ed35f609952d658b208a34"
+
+@app.route("/weather/<city>")
+def get_weather(city):
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={urllib.parse.quote(city)}&appid={API_KEY}&lang=kr&units=metric"
+    res = requests.get(url).json()
+    return jsonify(res)
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-# --- 과제 목록 조회 ---
-@app.route("/api/assignments")
-def get_assignments():
-    user_id = session.get("user_id")
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("SELECT id,date,task FROM assignments WHERE user_id=?", (user_id,))
-    tasks = [{"id": row[0], "date": row[1], "task": row[2]} for row in c.fetchall()]
-    conn.close()
-    return jsonify(tasks)
-
-# --- 과제 추가 ---
-@app.route("/api/assignments/add", methods=["POST"])
-def add_assignment():
-    user_id = session.get("user_id")
-    data = request.json
-    date = data.get("date")
-    task = data.get("task")
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("INSERT INTO assignments (user_id,date,task) VALUES (?,?,?)", (user_id, date, task))
-    conn.commit()
-    conn.close()
-    return jsonify({"status": "ok"})
-
-# --- 과제 삭제 ---
-@app.route("/api/assignments/delete", methods=["POST"])
-def delete_assignment():
-    user_id = session.get("user_id")
-    data = request.json
-    task_id = data.get("id")
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("DELETE FROM assignments WHERE id=? AND user_id=?", (task_id, user_id))
-    conn.commit()
-    conn.close()
-    return jsonify({"status": "ok"})
-
-# --- 날씨 불러오기 ---
-@app.route("/api/weather")
-def get_user_weather():
-    user_id = session.get("user_id")
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("SELECT city FROM weather WHERE user_id=?", (user_id,))
-    row = c.fetchone()
-    conn.close()
-    if row:
-        city = row[0]
-        return jsonify({"city": city, "weather": get_weather(city)})
-    return jsonify({"city": None, "weather": None})
-
-# --- 날씨 저장 ---
-@app.route("/api/weather/save", methods=["POST"])
-def save_weather():
-    user_id = session.get("user_id")
-    city = request.json.get("city")
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("SELECT * FROM weather WHERE user_id=?", (user_id,))
-    if c.fetchone():
-        c.execute("UPDATE weather SET city=? WHERE user_id=?", (city, user_id))
-    else:
-        c.execute("INSERT INTO weather (user_id,city) VALUES (?,?)", (user_id, city))
-    conn.commit()
-    conn.close()
-    return jsonify({"status": "ok"})
-
-# --- 운세 ---
-@app.route("/api/fortune")
-def get_fortune():
-    fortunes = [
-        "오늘은 당신에게 큰 기회가 찾아올 것입니다.",
-        "작은 일에도 감사함을 느끼는 하루가 되세요.",
-        "예상치 못한 좋은 소식이 찾아옵니다.",
-        "오늘은 휴식과 충전이 필요한 날입니다.",
-        "당신의 노력이 결실을 맺을 것입니다."
-    ]
-    return jsonify({"fortune": random.choice(fortunes)})
-
-# --- 성경 구절 (Bible API) ---
-@app.route("/api/verse")
-def get_verse():
-    try:
-        url = "https://api.scripture.api.bible/v1/bibles/krv/verses/JHN.1.1"
-        headers = {"api-key": BIBLE_API_KEY}
-        response = requests.get(url, headers=headers)
-        if response.status_code == 200:
-            data = response.json()
-            content = data["data"]["content"]
-            return jsonify({"verse": content})
-        else:
-            return jsonify({"verse": "성경 구절을 가져오는데 실패했습니다."})
-    except Exception as e:
-        return jsonify({"verse": f"오류 발생: {e}"})
-
-# --- 실행 ---
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))

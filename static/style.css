@@ -1,79 +1,82 @@
-.login-body {
+/* 공통 */
+body {
+  margin: 0;
+  font-family: 'Nanum Pen Script', cursive;
+  background: linear-gradient(to bottom, #87ceeb, #ffffff);
   display: flex;
   justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding-top: 50px;
+}
+
+/* 로그인 화면 */
+.login-body {
+  justify-content: center;
   align-items: center;
-  height: 100vh; /* 세로 전체 중앙 */
-  background: linear-gradient(to bottom, #87ceeb, #ffffff);
-  font-family: 'Nanum Pen Script', cursive;
 }
-
-/* 사이드바 */
-.sidebar {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 60px;
-  height: 100%;
-  background-color: #333;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 20px;
-}
-.menu-item {
-  color: white;
-  font-size: 24px;
-  margin: 15px 0;
-  cursor: pointer;
-}
-
-/* 메인 콘텐츠 */
-.content {
-  margin-left: 70px;
-  padding: 20px;
-}
-.section {
-  display: none;
-}
-.section.active {
-  display: block;
-}
-
-/* 컨텐츠 영역 */
-.content-container {
-  flex: 1;
-  padding: 30px;
-  box-sizing: border-box;
-}
-
-.tab-content {
-  display: none;
-}
-
-.tab-content.active {
-  display: block;
-}
-
-/* 챗봇 화면 */
-.chat-container {
+.login-container {
   background: rgba(255,255,255,0.9);
-  padding: 20px;
+  padding: 30px;
   border-radius: 25px;
-  width: 400px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
   text-align: center;
-  margin-bottom: 20px;
-  margin-left:120px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
 }
-
-#chat-form input[type="text"] {
+.login-container input {
+  display: block;
   width: 80%;
-  padding: 10px 15px;
+  margin: 10px auto;
+  padding: 10px;
   border-radius: 20px;
   border: 1px solid #ccc;
   font-size: 16px;
 }
 
+/* 챗봇 화면 */
+.chat-container {
+  display: flex;
+  width: 900px;
+  background: rgba(255,255,255,0.9);
+  padding: 20px;
+  border-radius: 25px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+}
+
+/* 사이드바 */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  margin-right: 20px;
+}
+.sidebar button {
+  background: #87ceeb;
+  border: none;
+  border-radius: 15px;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.sidebar button:hover {
+  background: #00bfff;
+}
+
+/* 메인 콘텐츠 */
+.main-content {
+  flex: 1;
+}
+
+/* 챗봇 */
+#chat-section {
+  margin-bottom: 20px;
+}
+#chat-form input[type="text"] {
+  width: 70%;
+  padding: 10px 15px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
 #chat-form input[type="submit"] {
   padding: 10px 20px;
   border-radius: 20px;
@@ -83,12 +86,10 @@
   font-size: 16px;
   cursor: pointer;
   margin-left: 5px;
-  margin-top: 20px;
 }
 #chat-form input[type="submit"]:hover {
   background-color: #00bfff;
 }
-
 .reply {
   margin-top: 15px;
   font-size: 18px;
@@ -100,32 +101,28 @@
 #assignmentsBox {
   margin-top: 15px;
   text-align: left;
-  max-height: 300px;
-  overflow-y: auto;
 }
-
 .assignment-card {
   background: #f0f8ff;
   padding: 10px 15px;
   border-radius: 15px;
   margin-bottom: 10px;
   position: relative;
-  word-wrap: break-word;
-  white-space: normal;
 }
-
-.delete-btn {
+.delete-btn, .check-btn {
   position: absolute;
   top: 10px;
   right: 15px;
-  background: #ff4d4d;
-  color: white;
   border: none;
   padding: 5px 10px;
   border-radius: 10px;
-  cursor: pointer;
   font-size: 12px;
+  cursor: pointer;
 }
-.delete-btn:hover {
-  background: #ff1a1a;
-}
+.delete-btn { background: #ff4d4d; color:white; }
+.delete-btn:hover { background: #ff1a1a; }
+.check-btn { background: #4caf50; color:white; right: 60px; }
+.check-btn:hover { background: #45a049; }
+
+/* 숨김 기본 */
+.section { display: none; }
